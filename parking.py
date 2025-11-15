@@ -1,10 +1,8 @@
-import random
-
 class Parking:
     def __init__(self):
         self.dict_abo = {}
         self.liste_place_abo_libres = []
-        self.parking = {f"{etage}" : {f"{etage}{i}" : None for i in range(80)} for etage in range(80)}
+        self.parking = {f"{etage}" : {f"{etage}{i}" : None for i in range(1, 81)} for etage in range(0, 5)}
 
 
 
@@ -45,7 +43,7 @@ class Parking:
 
     def desabonnement(self, voiture:object) -> None:
         """ retire l'abonnement d'une voiture """
-        for voiture in self.dict_abo[]
+        del self.dict_abo[voiture]
         
 
 
@@ -64,14 +62,14 @@ class Parking:
 
     
     def affiche_etage(self, numero):
+        # generer une liste correspondant aux places de l'etage
         for place, voiture in self.parking.items(): # place str , voiture objet
-            # verifier si le premier chiffre de la place est egal a notre numero d'etage faire attention aux types int et str
-            # si la place est dans l'etage
-            # modifier la case de la liste par True
-            # afficher la liste
+            # verifier si le premier chiffre de la place est egal a notre numero d'etage faire (attention aux types int et str)
+            # si la place est dans l'etage :
+                # modifier la case de la liste correspondant a la place dans l'etage par True
             pass
+        # afficher la liste
         
-    
 
 
 
