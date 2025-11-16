@@ -2,7 +2,7 @@ class Parking:
     def __init__(self):
         self.dict_abo = {}
         self.liste_place_abo_libres = []
-        self.parking = {f"{etage}" : {f"{etage}{i}" : None for i in range(1, 81)} for etage in range(0, 5)}
+        self.parking = {f"{etage}" : {f"{i}" : None for i in range(1, 81)} for etage in range(0, 5)}
 
 
 
@@ -25,9 +25,9 @@ class Parking:
 
     def place_vide(self, place:int) -> any:
         """ renvoie si une place est vide ou non """
-        if type(self.parking[str(place)]) == None:
+        if type(self.parking[str(place)[0]][str(place)[1:]]) == None:
             return False
-        return self.parking[str(place)]
+        return self.parking[str(place)[0]][str(place)[1:]]
     
 
 
@@ -61,9 +61,9 @@ class Parking:
 
 
     
-    def affiche_etage(self, numero):
+    def affiche_etage(self, numero_etage):
         # generer une liste correspondant aux places de l'etage
-        for place, voiture in self.parking.items(): # place str , voiture objet
+        for place, voiture in self.parking[str(numero_etage)].items(): # place str , voiture Voiture
             # verifier si le premier chiffre de la place est egal a notre numero d'etage faire (attention aux types int et str)
             # si la place est dans l'etage :
                 # modifier la case de la liste correspondant a la place dans l'etage par True

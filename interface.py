@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from PIL import Image, ImageTk
+from PIL import Image
 import random
 
 class Fenetre(ctk.CTk):
@@ -18,7 +18,7 @@ class Fenetre(ctk.CTk):
         # les frames
         self.frame_titre = FrameTitre(self)
         self.frame_parking = FrameParking(self)
-        self.frame_etage = FrameEtage(self)
+        self.frame_etage = FrameEtage(self, self)
 
 
         self.mainloop()
@@ -66,49 +66,80 @@ class FrameParking(ctk.CTkFrame):
         self.ligne_place = range(1, 11)
         self.colone_place_gauche = [0, 3, 6, 9]
         self.tableau = [[False for _ in range(11)] for _ in range(11)]
-        self.img_voiture_droite = ImageTk.PhotoImage(Image.open("images/voiture.png").rotate(90))
-        self.img_voiture_gauche = ImageTk.PhotoImage(Image.open("images/voiture.png").rotate(270))
-        self.img_parking_droite = ImageTk.PhotoImage(Image.open("images/place.png").rotate(90))
-        self.img_parking_gauche = ImageTk.PhotoImage(Image.open("images/place.png").rotate(270))
+        CASE_WIDTH, CASE_HEIGHT = 90, 52  # taille de tes cases
+
+        # Voiture droite
+        img_tmp = Image.open("images/voiture.png").rotate(270, expand=True)
+        img_tmp = img_tmp.resize((CASE_WIDTH, CASE_HEIGHT))
+        self.img_voiture_droite = ctk.CTkImage(img_tmp, size=(CASE_WIDTH, CASE_HEIGHT))
+
+        # Voiture gauche
+        img_tmp = Image.open("images/voiture.png").rotate(90, expand=True)
+        img_tmp = img_tmp.resize((CASE_WIDTH, CASE_HEIGHT))
+        self.img_voiture_gauche = ctk.CTkImage(img_tmp, size=(CASE_WIDTH, CASE_HEIGHT))
+
+        # Parking droite
+        img_tmp = Image.open("images/place.png").rotate(270, expand=True)
+        img_tmp = img_tmp.resize((CASE_WIDTH, CASE_HEIGHT))
+        self.img_parking_droite = ctk.CTkImage(img_tmp, size=(CASE_WIDTH, CASE_HEIGHT))
+
+        # Parking gauche
+        img_tmp = Image.open("images/place.png").rotate(90, expand=True)
+        img_tmp = img_tmp.resize((CASE_WIDTH, CASE_HEIGHT))
+        self.img_parking_gauche = ctk.CTkImage(img_tmp, size=(CASE_WIDTH, CASE_HEIGHT))
+
         # creation de la grille
-        for ligne in range(11):
-            for colone in range(11):
-                cell = ctk.CTkFrame(
+        for i in range(12):
+            self.rowconfigure(i, weight=1)
+            self.columnconfigure(i, weight=1)
+
+
+        # creation de la grille
+        for ligne in range(12):
+            for colone in range(12):
+                case = ctk.CTkFrame(
                     self,
-                    width=90,
-                    height=52,
                     fg_color="#333",
-                    corner_radius=0
+                    corner_radius=0,
+                    width=90,
+                    height=52
                 )
-                self.tableau[ligne][colone] = ctk.CTkLabel(self)
-                cell.grid(row=ligne, column=colone)
+
+                case.grid(row=ligne, column=colone, padx=0, pady=0)
+
+                label = ctk.CTkLabel(case, text="", width=90, height=52)
+                label.pack(expand=True, fill="both", padx=0, pady=0)
+
+                self.tableau[ligne][colone] = label
         self.remplir_grille()
 
 
     
 
     def remplir_grille(self):
-        liste_places = [False]*80
-        for place, voiture in self.master.parking.items():
-            print('ok')
-            if place[0] == self.master.etage:
-                if voiture == True:
-                    liste_places[place[1:]] = True
-
-        i = 0
-        for ligne in range(11):
-            for colone in range(11):
+        i = 1
+        for ligne in range(12):
+            for colone in range(12):
                 if not colone in self.colone_place:
                     continue
                 if not ligne in self.ligne_place:
                     continue
-                if liste_places[i]:
-                    self.tableau[ligne][colone].configure(image=(self.img_voiture_gauche if ligne in self.colone_place_gauche else self.img_voiture_droite))
-                    self.tableau[ligne][colone].image_ref = image=(self.img_voiture_gauche if ligne in self.colone_place_gauche else self.img_voiture_droite)
+                voiture = self.master.parking[self.master.etage.get()][f"{str(i)}"]
+                if voiture != None:
+                    self.tableau[ligne][colone].configure(image=(self.img_voiture_gauche if colone in self.colone_place_gauche else self.img_voiture_droite))
+                    self.tableau[ligne][colone].image_ref = (self.img_voiture_gauche if colone in self.colone_place_gauche else self.img_voiture_droite)
+                    self.tableau[ligne][colone].bind(
+                        '<Double-Button-1>',
+                        lambda event, v=voiture: self.ouvrir_menu(event, v)
+                    )
                 else:
-                    self.tableau[ligne][colone].configure(image=(self.img_parking_gauche if ligne in self.colone_place_gauche else self.img_parking_droite))
-                    self.tableau[ligne][colone].image_ref = image=(self.img_parking_gauche if ligne in self.colone_place_gauche else self.img_parking_droite)
+                    self.tableau[ligne][colone].configure(image=(self.img_parking_gauche if colone in self.colone_place_gauche else self.img_parking_droite))
+                    self.tableau[ligne][colone].image_ref = (self.img_parking_gauche if colone in self.colone_place_gauche else self.img_parking_droite)
                 i += 1
+
+
+    def ouvrir_menu(self, event, voiture:object):
+        OuvrirMenu(self.master, voiture)
 
 
 
@@ -119,7 +150,7 @@ class FrameParking(ctk.CTkFrame):
 
 class FrameEtage(ctk.CTkFrame):
     """ frame qui contient le systeme d'etages """
-    def __init__(self, master:Fenetre):
+    def __init__(self, event, master:Fenetre):
         """ constructeur """
         self.master = master
         super().__init__(
@@ -172,6 +203,7 @@ class FrameEtage(ctk.CTkFrame):
             self.master.etage.set(f"{etage+1}")
         etage = self.master.etage.get()
         self.txt_etage.configure(text=etage)
+        self.master.frame_parking.remplir_grille()
 
     def etage_bas(self):
         """ descend d'un etage """
@@ -184,6 +216,23 @@ class FrameEtage(ctk.CTkFrame):
             self.master.etage.set(f"{etage-1}")
         etage = self.master.etage.get()
         self.txt_etage.configure(text=etage)
+        self.master.frame_parking.remplir_grille()
+
+
+
+
+
+class OuvrirMenu(ctk.CTkToplevel):
+    def __init__(self, fenetre:object, voiture:object):
+        super().__init__(fenetre)
+        self.geometry("250x250+200+200")
+
+        # les infos
+        ctk.CTkLabel(
+            self,
+            text="Nom :",
+            font=('Arial', 20)
+        ).place(x=20, y=20)
 
 
 
@@ -192,4 +241,13 @@ class FrameEtage(ctk.CTkFrame):
 
 
 
-Fenetre({f"{etage}" : {f"{etage}{i}" : random.choice([False, True]) for i in range(1, 81)} for etage in range(0, 5)})
+
+
+
+
+
+
+
+
+
+Fenetre({f"{etage}" : {f"{i}" : random.choice([None, True]) for i in range(1, 81)} for etage in range(0, 5)})
