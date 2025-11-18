@@ -1,19 +1,18 @@
-import parking
 import random
 
 
 
+
+
 class Voiture:
-    def __init__(self, imatriculation, marque, nom_proprio, abonnement):
+    def __init__(self, imatriculation, marque, nom_proprio):
         self.imatriculation = imatriculation
         self.marque = marque
         self.proprio = nom_proprio
-        self.abonnement = abonnement
 
 
 
-
-def generer_voiture_aleatoire():
+def generer_voiture_aleatoire(parking:object):
     liste_voiture = []
     place = random.randint(20, 25)
     imatriculation = f"{random.randint(1000, 9999)}-{random.choice(['AA', 'BB', 'CC', 'DD', 'EE'])}-{random.randint(1, 99)}"
@@ -141,19 +140,21 @@ def generer_voiture_aleatoire():
 
     for i in range(place):
         abonnement = None
+        voiture = Voiture(imatriculation, random.choice(marques), random.choice(nom_proprio))
         a = random.randint(1,2)
         if a == 1:
             abonnement = True
         else :
             abonnement = False
-        voiture = Voiture(imatriculation, random.choice(marques), random.choice(nom_proprio), abonnement)
-
         if abonnement :
-            parking.Parking.abonnement(voiture)
+            parking.abonnement(voiture)
             
         liste_voiture.append(voiture)
     
     return liste_voiture
+
+print(generer_voiture_aleatoire())
+
 
 
 

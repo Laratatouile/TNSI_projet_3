@@ -8,9 +8,9 @@ class Fenetre(ctk.CTk):
 
         # options de la fenetre
         self.title("Les parkings")
-        self.geometry("1060x642+100+40")
-        self.minsize(1060, 642)
-        self.maxsize(6000, 5500)
+        self.geometry("1150x694+100+40")
+        self.minsize(1150, 694)
+        self.maxsize(1150, 5500)
 
         self.parking = parking
 
@@ -56,16 +56,16 @@ class FrameParking(ctk.CTkFrame):
         """ constructeur """
         super().__init__(
             master,
-            width=990,
-            height=572,
+            width=1080,
+            height=624,
             corner_radius=0,
         )
         self.pack(side="left")
         self.master = master
         self.colone_place = [0, 2, 3, 5, 6, 8, 9, 11]
-        self.ligne_place = range(1, 11)
+        self.ligne_place = range(1, 9)
         self.colone_place_gauche = [0, 3, 6, 9]
-        self.tableau = [[False for _ in range(11)] for _ in range(11)]
+        self.tableau = [[False for _ in range(12)] for _ in range(12)]
         CASE_WIDTH, CASE_HEIGHT = 90, 52  # taille de tes cases
 
         # Voiture droite
@@ -91,6 +91,7 @@ class FrameParking(ctk.CTkFrame):
         # creation de la grille
         for i in range(12):
             self.rowconfigure(i, weight=1)
+        for i in range(12):
             self.columnconfigure(i, weight=1)
 
 
@@ -225,7 +226,9 @@ class FrameEtage(ctk.CTkFrame):
 class OuvrirMenu(ctk.CTkToplevel):
     def __init__(self, fenetre:object, voiture:object):
         super().__init__(fenetre)
+        self.title("Informations sur la voiture")
         self.geometry("250x250+200+200")
+        self.attributes("-topmost", True)
 
         # les infos
         ctk.CTkLabel(
@@ -233,16 +236,31 @@ class OuvrirMenu(ctk.CTkToplevel):
             text="Nom :",
             font=('Arial', 20)
         ).place(x=20, y=20)
-
-
-
-
-
-
-
-
-
-
+        ctk.CTkLabel(
+            self, 
+            text=f"e",#{voiture.proprio}",
+            font=('Arial', 20)
+        ).place(x=20, y=50)
+        ctk.CTkLabel(
+            self,
+            text="Marque :",
+            font=('Arial', 20)
+        ).place(x=20, y=80)
+        ctk.CTkLabel(
+            self,
+            text=f"e",#{voiture.marque}",
+            font=('Arial', 20)
+        ).place(x=20, y=110)
+        ctk.CTkLabel(
+            self,
+            text="Plaque :",
+            font=('Arial', 20)
+        ).place(x=20, y=140)
+        ctk.CTkLabel(
+            self,
+            text=f"e",#{voiture.plaque}",
+            font=('Arial', 20)
+        ).place(x=20, y=170)
 
 
 
