@@ -25,7 +25,8 @@ print("""
 """)
 reponse = input(">>>")
 if reponse == "1":
-    print("dans la cosole")
+    while True:
+        print("voiture")
 elif reponse == "2":
     print("interface")
 
