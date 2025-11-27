@@ -153,8 +153,6 @@ def generer_voiture_aleatoire(parking:object):
     
     return liste_voiture
 
-print(generer_voiture_aleatoire())
-
 
 
 

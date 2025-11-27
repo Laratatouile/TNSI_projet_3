@@ -11,14 +11,22 @@ class Parking:
         # si la voiture est abonee
         if voiture in self.dict_abo.keys():
             place = str(self.dict_abo[voiture])
-            if self.parking[place] == None:
-                self.parking[place] = voiture
+            if self.parking[place[0]][place[1:]] == None:
+                self.parking[place[0]][place[1:]] = voiture
             else:
                 place = self.__premiere_place_libre()
-                self.parking[place] = voiture
+                self.parking[place[0]][place[1:]] = voiture
         # si elle n'est pas abonee
         else:
-            self.parking[str(self.__premiere_place_libre())] = voiture
+            place = str(self.__premiere_place_libre())
+            self.parking[place[0]][place[1:]] = voiture
+
+
+    def retirer_voiture(self, place:str) -> None:
+        """ retire une voiture d'une place """
+        self.parking[place[0]][place[1:]] = None
+        return None
+
     
 
 
@@ -30,6 +38,11 @@ class Parking:
         return self.parking[str(place)[0]][str(place)[1:]]
     
 
+
+    def get_abonnes(self) -> dict:
+        """ renvoie le dictionnaire des abonnes """
+        return self.dict_abo
+    
 
 
 
@@ -52,7 +65,8 @@ class Parking:
 
     def __premiere_place_libre(self):
         """ renvoie la premiere place libre du parking """
-        for place, voiture in self.parking.items():
+        for voiture, place in self.parking.items():
+            print(place)
             if voiture == None:
                 return place
         return False
@@ -61,12 +75,10 @@ class Parking:
 
 
     
-    def affiche_etage(self, numero_etage):
+    def affiche_etage(self, numero_etage:str):
         # generer une liste correspondant aux places de l'etage
-        for place, voiture in self.parking[str(numero_etage)].items(): # place str , voiture Voiture
-            # verifier si le premier chiffre de la place est egal a notre numero d'etage faire (attention aux types int et str)
-            # si la place est dans l'etage :
-                # modifier la case de la liste correspondant a la place dans l'etage par True
+        for place, voiture in self.parking[numero_etage].items(): # place str , voiture Voiture
+            # modifier la case de la liste correspondant a la place dans l'etage par True
             pass
         # afficher la liste
         

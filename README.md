@@ -13,10 +13,12 @@ proprio
 
 # Parking
 ajouter_voiture(:Voiture)
-place_vide(place:int/str)
+retirer_voiture(place:int/str)
+place_vide(place:str)
 abonnement(:Voiture)
 desabonnement(:Voiture)
-affiche_etage(etage:int/str)
+affiche_etage(etage:str)
+get_abonnes()
 
 
 # Interface
