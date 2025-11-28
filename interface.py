@@ -12,7 +12,7 @@ class Fenetre(ctk.CTk):
         self.minsize(1150, 694)
         self.maxsize(1150, 5500)
 
-        self.parking = parking
+        self.parking = parking.parking
 
         self.etage = ctk.StringVar(self, value="0")
         # les frames
@@ -262,10 +262,3 @@ class OuvrirMenu(ctk.CTkToplevel):
             font=('Arial', 20)
         ).place(x=20, y=170)
 
-
-
-
-
-
-
-Fenetre({f"{etage}" : {f"{i}" : random.choice([None, True]) for i in range(1, 81)} for etage in range(0, 5)})

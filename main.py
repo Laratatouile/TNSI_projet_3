@@ -3,6 +3,7 @@ import parking
 import random
 import time
 import threading
+import interface
 
 
 # instancier un parking pour la generation de la liste des voitures
@@ -26,7 +27,7 @@ print("""
     
     Entrez 1 ou 2
 """)
-reponse = input(">>>")
+reponse = input(">>> ")
 
 
 
@@ -45,7 +46,7 @@ class Actions:
         """ realise une action aleatoire sur le parking """
         voiture_use = random.choice(self.liste_voitures)
         option = random.choice(self.actions_possibles)
-        place = f"{random.randint(0, 4)}{random.randint(1, 81)}"
+        place = f"{random.randint(0, 4)}{random.randint(1, 80)}"
         # on ajoute une voiture
         if option == "ajouter_voiture":
             self.parking.ajouter_voiture(voiture_use)
@@ -53,7 +54,7 @@ class Actions:
         elif option == "retirer_voiture":
             i = 0
             while self.parking.place_vide(place):
-                place = f"{random.randint(0, 4)}{random.randint(0, 80)}"
+                place = f"{random.randint(0, 4)}{random.randint(1, 80)}"
                 if i == 10:
                     break
             else:
@@ -89,30 +90,41 @@ thread_boucle = True
 thread_actions = threading.Thread(target=boucle, daemon=True)
 thread_actions.start()
 
-print("ok")
-
-print(thread_actions.is_alive())
+for _ in range(5):
+    print()
 
 # si l'utilisateur choisis la console
 print(reponse)
 if reponse == "1":
     actions = Actions(parking1, liste_voitures)
     while True:
+        print()
         print("tapez x pour arreter")
         print("numero de l'etage : ")
         num_etage = input(">>> ")
+        for _ in range(5):
+            print()
         if num_etage == "x":
             thread_boucle = False
             exit()
         else:
-            num_etage = int(num_etage)
-            if 0 <= num_etage < 5:
-                print(num_etage)
-            else:
-                print("")
-        #self.parking.affiche_etage(num_etage)
+            try:
+                if 0 <= int(num_etage) < 5:
+                    parking1.affiche_etage(num_etage)
+                else:
+                    print("l'etage selectionne n'est pas valide")
+            except:
+                print("ce n'est pas un chiffre")
 
 
+elif reponse == "2":
+    interface.Fenetre(parking1)
+
+
+
+
+
+print("le code a fini de s'executer normalement")
 
 
 
