@@ -46,18 +46,22 @@ class Actions:
         voiture_use = random.choice(self.liste_voitures)
         option = random.choice(self.actions_possibles)
         place = f"{random.randint(0, 4)}{random.randint(1, 81)}"
+        # on ajoute une voiture
         if option == "ajouter_voiture":
             self.parking.ajouter_voiture(voiture_use)
+        # on en retire une
         elif option == "retirer_voiture":
             i = 0
             while self.parking.place_vide(place):
-                place = f"{random.randint(0, 4)}{random.randint(1, 81)}"
+                place = f"{random.randint(0, 4)}{random.randint(0, 80)}"
                 if i == 10:
                     break
             else:
                 self.parking.retirer_voiture(place)
+        # on abonne une voiture
         elif option == "abonnement":
             self.parking.abonnement(voiture_use)
+        # on en desabonne une
         elif option == "desabonnement":
             liste_abos = self.parking.get_abonnes().keys()
             if not liste_abos == []:
@@ -75,22 +79,37 @@ action = Actions(parking1, liste_voitures)
 
 
 def boucle():
-    while True:
+    global thread_boucle
+    while thread_boucle:
         action.aleatoire()
+        time.sleep(0.1)
 
 
-thread_actions = threading.Thread(target=boucle())
+thread_boucle = True
+thread_actions = threading.Thread(target=boucle, daemon=True)
 thread_actions.start()
 
+print("ok")
 
+print(thread_actions.is_alive())
 
 # si l'utilisateur choisis la console
+print(reponse)
 if reponse == "1":
     actions = Actions(parking1, liste_voitures)
     while True:
+        print("tapez x pour arreter")
         print("numero de l'etage : ")
-        num_etage = int(input(">>>"))
-        print(num_etage)
+        num_etage = input(">>> ")
+        if num_etage == "x":
+            thread_boucle = False
+            exit()
+        else:
+            num_etage = int(num_etage)
+            if 0 <= num_etage < 5:
+                print(num_etage)
+            else:
+                print("")
         #self.parking.affiche_etage(num_etage)
 
 

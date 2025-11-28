@@ -65,22 +65,20 @@ class Parking:
 
     def __premiere_place_libre(self):
         """ renvoie la premiere place libre du parking """
-        for voiture, place in self.parking.items():
-            print(place)
-            if voiture == None:
-                return place
-        return False
-
-
+        for nbr_etage, etage in self.parking.items():
+            for place, voiture in etage.items():
+                if voiture == None:
+                    return f"{nbr_etage}{place}"
+        return None
 
 
     
     def affiche_etage(self, numero_etage:str):
-        # generer une liste correspondant aux places de l'etage
-        for place, voiture in self.parking[numero_etage].items(): # place str , voiture Voiture
-            # modifier la case de la liste correspondant a la place dans l'etage par True
-            pass
-        # afficher la liste
+        liste_voiture = [False for _ in range(80)]
+        for place, voiture in self.parking[numero_etage].items():
+            if voiture != None :
+                liste_voiture[place] = True 
+        print(liste_voiture)
         
 
 
