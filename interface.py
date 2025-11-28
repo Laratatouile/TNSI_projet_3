@@ -20,7 +20,6 @@ class Fenetre(ctk.CTk):
         self.frame_parking = FrameParking(self)
         self.frame_etage = FrameEtage(self, self)
 
-
         self.mainloop()
 
 
@@ -45,6 +44,13 @@ class FrameTitre(ctk.CTkFrame):
             text_color="#000000",
             font=('Arial', 35)
         ).place(x=120, y=12)
+        # bouton actualiser
+        ctk.CTkButton(
+            self,
+            width=100,
+            text="acutaliser",
+            command=lambda:master.frame_parking.remplir_grille()
+        ).place(x=900, y=15)
 
 
 

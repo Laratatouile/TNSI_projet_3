@@ -70,27 +70,27 @@ class Actions:
             voiture_use = random.choice(liste_abos)
             self.parking.desabonnement(voiture_use)
         return None
-            
-        
+    
+
+    def boucle(self):
+        global thread_boucle
+        while thread_boucle:
+            self.aleatoire()
+            time.sleep(0.1)
+
+
+
             
 
 
 
 action = Actions(parking1, liste_voitures)
 
-
-def boucle():
-    global thread_boucle
-    while thread_boucle:
-        action.aleatoire()
-        time.sleep(0.1)
-
-
 thread_boucle = True
-thread_actions = threading.Thread(target=boucle, daemon=True)
+thread_actions = threading.Thread(target=action.boucle, daemon=True)
 thread_actions.start()
 
-for _ in range(5):
+for _ in range(10):
     print()
 
 # si l'utilisateur choisis la console
@@ -105,8 +105,7 @@ if reponse == "1":
         for _ in range(5):
             print()
         if num_etage == "x":
-            thread_boucle = False
-            exit()
+            break
         else:
             try:
                 if 0 <= int(num_etage) < 5:
@@ -123,7 +122,8 @@ elif reponse == "2":
 
 
 
-
+if thread_actions.is_alive():
+    thread_boucle = False
 print("le code a fini de s'executer normalement")
 
 
