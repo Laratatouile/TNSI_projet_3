@@ -77,8 +77,15 @@ class Parking:
         liste_voiture = [False for _ in range(80)]
         for place, voiture in self.parking[numero_etage].items():
             if voiture != None :
-                liste_voiture[place] = True 
-        print(liste_voiture)
+                liste_voiture[int(place)] = True 
+        for i in range(8):
+            ligne1 = "_"
+            ligne2 = "|"
+            for j in range(10):
+                ligne1 += "__"
+                ligne2 += f"{"V" if liste_voiture[i*10+j] else " "}|"
+            print(ligne1)
+            print(ligne2)
         
 
 

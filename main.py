@@ -112,8 +112,9 @@ if reponse == "1":
                     parking1.affiche_etage(num_etage)
                 else:
                     print("l'etage selectionne n'est pas valide")
-            except:
+            except Exception as e:
                 print("ce n'est pas un chiffre")
+                print(e)
 
 
 elif reponse == "2":

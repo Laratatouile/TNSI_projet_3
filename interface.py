@@ -10,7 +10,7 @@ class Fenetre(ctk.CTk):
         self.title("Les parkings")
         self.geometry("1150x694+100+40")
         self.minsize(1150, 694)
-        self.maxsize(1150, 5500)
+        self.maxsize(1150, 694)
 
         self.parking = parking.parking
 
